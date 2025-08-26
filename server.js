@@ -119,8 +119,8 @@ app.post('/apply', upload, async (req, res) => {
 
     console.log('New job application:', application);
     
-    // Send confirmation email to applicant
-    await sendApplicationConfirmation(email, fullName);
+    // Send confirmation email to applicant with resume attachment
+    await sendApplicationConfirmation(email, fullName, resumePath);
     
     // Here you would typically send an email to HR/recruitment team
     // with the application details and resume attachment

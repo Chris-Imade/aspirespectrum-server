@@ -18,6 +18,8 @@ const sendMail = async (mailOptions) => {
   }
 };
 
+const path = require('path');
+
 const sendContactMail = async (contactInfo) => {
   const { firstName, lastName, email, phone, message } = contactInfo;
 
@@ -107,7 +109,7 @@ const sendNewsletterConfirmation = async (email) => {
   await sendMail(mailOptions);
 };
 
-const sendApplicationConfirmation = async (email, fullName) => {
+const sendApplicationConfirmation = async (email, fullName, resumePath = null) => {
   const mailOptions = {
     from: process.env.GMAIL_USER,
     to: email,
@@ -146,9 +148,14 @@ const sendApplicationConfirmation = async (email, fullName) => {
         <h3>New Job Application Received</h3>
         <p>You have received a new job application from ${fullName}.</p>
         <p><strong>Email:</strong> ${email}</p>
-        <p>Please log in to the admin panel to review the application details.</p>
+        <p>Please find the applicant's resume attached to this email.</p>
+        <p>You can also log in to the admin panel to review all application details.</p>
       </div>
     `,
+    attachments: resumePath ? [{
+      filename: `resume_${fullName.replace(/\s+/g, '_')}${path.extname(resumePath)}`,
+      path: resumePath
+    }] : []
   };
 
   await sendMail(hrMailOptions);
